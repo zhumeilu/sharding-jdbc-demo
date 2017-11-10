@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:rdb="http://www.dangdang.com/schema/ddframe/rdb"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.dangdang.com/schema/ddframe/rdb
+                        http://www.dangdang.com/schema/ddframe/rdb/rdb.xsd">
+
+    <rdb:strategy id="tableShardingStrategy" sharding-columns="createDate" algorithm-class="com.zml.config.MemberSingleKeyTableShardingAlgorithm"/>
+
+    <rdb:data-source id="shardingDataSource">
+        <rdb:sharding-rule data-sources="dataSource">
+            <rdb:table-rules>
+                <rdb:table-rule logic-table="admin" actual-tables="admin_tbl_201${[7,8,9]}${0..53}"  table-strategy="tableShardingStrategy"/>
+               <!-- <rdb:table-rule logic-table="admin" actual-tables="admin_tbl_${actual.tables}${actual.tables2}"  table-strategy="tableShardingStrategy"/>-->
+            </rdb:table-rules>
+        </rdb:sharding-rule>
+    </rdb:data-source>
+    <!--<bean-->
+            <!--class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+        <!--<property name="locations">-->
+            <!--<list>-->
+                <!--<value>classpath*:application_test.properties</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+</beans>

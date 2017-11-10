@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<properties>
+		<Property name="LOG_HOME">/www/resin/default/webapps/wwwlemeng/WEB-INF/log/wwwlemeng
+		</Property>
+	</properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout charset="UTF-8"
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+
+		<RollingFile name="RollingFile" fileName="${LOG_HOME}/param-platform.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/website-%d{yyyy-MM-dd}-%i.log"
+			append="true">
+			<PatternLayout charset="UTF-8"
+				pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy modulate="true"
+					interval="1" />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<!-- myibatis log configure -->
+		<logger name="com.apache.ibatis" level="DEBUG" />
+		<logger name="org.mybatis.spring" level="DEBUG" />
+		<logger name="org.mybatis.spring.SqlSessionFactoryBean" level="DEBUG" />
+		<logger name="java.sql.Connection" level="DEBUG" />
+		<logger name="java.sql.Statement" level="DEBUG" />
+		<logger name="java.sql.PreparedStatement" level="DEBUG" />
+		<!-- 减少部分debug日志 -->
+		<logger name="druid.sql" level="INFO" />
+		<logger name="net.sf.ehcache" level="INFO" />
+		<logger name="org.apache.shiro" level="INFO" />
+		<logger name="org.mybatis.spring" level="INFO" />
+		<logger name="org.springframework" level="INFO" />
+
+		<!-- 业务debug日志 -->
+		<logger name="com.lemeng.website" level="DEBUG" />
+
+		<Root level="WARN">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>

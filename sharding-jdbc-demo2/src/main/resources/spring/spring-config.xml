@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+	   default-autowire="byName">
+
+
+	<!-- <bean class="com.lottery.client.config.WebConfig"> </bean> -->
+
+	<!-- 启用CGliB -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- spring扫描 -->
+	<context:component-scan base-package="com.zml">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+	</context:component-scan>
+	<!-- jedis cluster config -->
+	<!--<bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="minIdle" value="${redis.minIdle}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+	</bean>
+
+	<bean id="jedisCluster" class="com.lemeng.api.common.redis.JedisClusterUtil"
+		  init-method="afterPropertiesSet">
+		<property name="address" value="${address}" />
+		<property name="timeout" value="${redis.timeout}" />
+		<property name="maxRedirections" value="${redis.maxRedirections}" />
+		<property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
+	</bean>-->
+	<!-- 开启这个配置，spring才能识别@Scheduled注解   -->
+	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+	<task:scheduler id="qbScheduler" pool-size="10"/>
+
+	<import resource="classpath:spring/spring-mybatis.xml" />
+
+	<!--<bean id="remoteUserService"-->
+		  <!--class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">-->
+		<!--<property name="serviceUrl" value="${USER.URL}" />-->
+		<!--<property name="serviceInterface" value="com.lemeng.website.service.UserLemengIService" />-->
+	<!--</bean>-->
+</beans>
