@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zml.mapper.OrderMapper">
+    <update id="createIfNotExistsTable">
+        CREATE TABLE IF NOT EXISTS t_order (order_id BIGINT AUTO_INCREMENT, user_id INT NOT NULL, status VARCHAR(50), PRIMARY KEY (order_id));
+    </update>
+
+    <update id="truncateTable">
+        TRUNCATE TABLE t_order;
+    </update>
+    
+    <update id="dropTable">
+        DROP TABLE IF EXISTS t_order;
+    </update>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO t_order (
+          order_id,user_id, status
+        )
+        VALUES (
+        #{orderId},
+        #{userId,jdbcType=INTEGER},
+        #{status,jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <delete id="delete">
+        DELETE FROM t_order WHERE order_id = #{orderId,jdbcType=INTEGER}
+    </delete>
+
+    <select id="testLeftJoin" resultType="com.zml.model.User">
+        select
+         u.user_id userId,
+         u.id id ,
+         o.order_id orderId,
+         u.username username
+        from t_user u
+        LEFT JOIN t_order o ON u.user_id = o.user_id
+    </select>
+    <select id="testBetween" resultType="com.zml.model.User">
+        select
+         u.user_id userId,
+         u.id id ,
+         o.order_id orderId,
+         u.username username
+        from t_user u
+        LEFT JOIN t_order o ON u.user_id = o.user_id
+        WHERE o.order_id>1 and o.order_id&lt;5
+    </select>
+    <select id="testLeftJoinPage" resultType="com.zml.model.User">
+        select
+         u.user_id userId,
+         u.id id ,
+         o.order_id orderId,
+         u.username username
+        from t_user u
+        LEFT JOIN t_order o ON u.user_id = o.user_id
+    </select>
+</mapper>
